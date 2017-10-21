@@ -10,9 +10,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.jdbc.core.JdbcTemplate;
 
-@Configuration
-@EnableAutoConfiguration
-@ComponentScan(basePackages = "library")
+@SpringBootApplication
 public class Application {
 
 	@Bean
