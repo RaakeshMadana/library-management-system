@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.ArrayList;
 
 @Repository
 public class BookRepository {
@@ -14,8 +15,24 @@ public class BookRepository {
 	@Autowired
 	protected JdbcTemplate jdbcTemplate;
 
-	public Book getFirstBook(){
-		return jdbcTemplate.queryForObject("SELECT * FROM book", bookMapper);
+	public List<Book> getAllBooks() {
+		return jdbcTemplate.query("SELECT * FROM book", bookMapper);
+	}
+
+	public int[] insertBooks(final List<Book> books) {
+		List<Object[]> batch = new ArrayList<Object[]>();
+		for(Book book : books) {
+			Object[] values = new Object[] {
+				book.getISBN10(),
+				book.getISBN13(),
+				book.getTitle(),
+				book.getCover(),
+				book.getPublisher(),
+				book.getPages()};
+			batch.add(values);
+		}
+		int[] updateCount = jdbcTemplate.batchUpdate("INSERT INTO book VALUES(?, ?, ?, ?, ?, ?)", batch);
+		return updateCount;
 	}
 
 	public static final RowMapper<Book> bookMapper = new RowMapper<Book>() {
