@@ -8,7 +8,8 @@ import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
-import java.util.HashSet;
+import java.util.TreeSet;
+import java.sql.SQLException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,7 +27,7 @@ public class AuthorLoading {
 	public Set<String> loadAuthors() {
 		
 		String fileName = "src/main/resources/books.csv";
-		Set<String> authors = new HashSet<String>();
+		Set<String> authors = new TreeSet<String>(String.CASE_INSENSITIVE_ORDER);
 
 		try {
 
@@ -42,12 +43,18 @@ public class AuthorLoading {
 				}
 			}
 
-			for(String author: authors) {
-				jdbcTemplate.update("INSERT INTO authors(name) VALUES(?)", author);
-			}
 		}
 		catch(Exception exception) {
 			exception.printStackTrace();
+		}
+
+		for(String author: authors) {
+			try {
+				jdbcTemplate.update("INSERT INTO author(name) VALUES(?)", author);
+			}
+			catch(Exception e) {
+				System.out.println("record exists");
+			}
 		}
 		
 		return authors;
