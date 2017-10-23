@@ -67,6 +67,16 @@ a.navbar-brand:hover {
 	color: #2aa198;
 }
 
+.available {
+	color: #859900;
+	font-weight: bold;
+}
+
+.notavailable {
+	color: #dc322f;
+	font-style: italic;
+}
+
 #content {
 	background-color: #fdf6e3;
 	margin-top: 0px;

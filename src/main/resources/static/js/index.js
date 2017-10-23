@@ -17,6 +17,16 @@ function search() {
 			console.log(data.length);
 			var res = "";
 			for(var i = 0; i < data.length; i++) {
+				var availability = "";
+				var availabilityClass = "";
+				if(data[i]["availability"]){
+					var availability = "Available";
+					var availabilityClass = "available";
+				}
+				else{
+					availability = "Not Available";
+					availabilityClass = "notavailable";
+				}
 				var div = '';
 				div = '<div class="book" id="' + data[i]["isbn13"] + '">';
 				div += '<img src="' + data[i]["cover"] + '" alt="' + data[i]["isbn13"] + '" />';
@@ -30,6 +40,7 @@ function search() {
 				div += '</p>';
 				div += '<p><span class="isbn13"><span class="isbn">ISBN13:</span>' + data[i]["isbn13"] + '</span><span class="isbn10"><span class="isbn">ISBN10:</span>' + data[i]["isbn10"] + '</span></p>'; 
 				div += '<p><span class="pages"><span class="pagepub">Pages:</span>' + data[i]["pages"] + '</span><span class="publisher"><span class="pagepub">Publisher:</span>' + data[i]["publisher"] + '</span></p>'; 
+				div += '<p><span class="' + availabilityClass + '">' + availability + '</span></p>';
 				div += '</div>';
 				res += div;
 			}

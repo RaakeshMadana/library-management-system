@@ -16,6 +16,9 @@ public class BookService {
 	@Autowired
 	private AuthorRepository authorRepo;
 
+	@Autowired
+	private BookLoanRepository bookLoanRepo;
+
 	@RequestMapping("/book")
 	public List<Book> sendBooks() {
 		return bookRepo.getAllBooks();
@@ -27,6 +30,7 @@ public class BookService {
 		List<BookResult> tempBookResults = new ArrayList<BookResult>(bookRepo.getSearchResults(query));
 		for(BookResult bookResult : tempBookResults) {
 			bookResult.setAuthors(authorRepo.getAuthorNamesByISBN13(bookResult.getISBN13()));
+			bookResult.setAvailability(bookLoanRepo.getAvailability(bookResult.getISBN13()));
 			bookResults.add(bookResult);
 		}
 		return bookResults;
