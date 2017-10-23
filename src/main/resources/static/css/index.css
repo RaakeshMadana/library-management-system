@@ -4,7 +4,7 @@ html * {
 }
 
 nav {
-	background-color: #eee8d5;
+	background-color: #073642;
 	margin-bottom: 0px;
 }
 
@@ -18,8 +18,53 @@ footer {
 	margin-top: 30px;
 }	
 
+img {
+	float: left;
+	padding-top: 20px;
+	padding-bottom: 20px;
+	padding-right: 20px;
+}
+
+.navbar-brand {
+	color: #d33682;
+}
+
+a.navbar-brand:hover {
+	color: #6c71c4;
+}
+
 .link {
 	color: #268bd2;
+}
+
+.book {
+	padding-top: 10px;
+	padding-bottom: 10px;
+}
+
+.title {
+	color: #b58900;
+	padding-top: 10px;
+}
+
+.authors {
+	color: #6c71c4;
+}
+
+.isbn {
+	color: #cb4b16;
+}
+
+.isbn13, .pages {
+	padding-right: 20px;
+}
+
+.isbn10, .publisher {
+	padding-left: 20px;
+}
+
+.pagepub {
+	color: #2aa198;
 }
 
 #content {
