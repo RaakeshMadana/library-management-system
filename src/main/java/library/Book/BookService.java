@@ -12,9 +12,24 @@ public class BookService {
 
 	@Autowired
 	private BookRepository bookRepo;
+	
+	@Autowired
+	private AuthorRepository authorRepo;
 
 	@RequestMapping("/book")
 	public List<Book> sendBooks() {
 		return bookRepo.getAllBooks();
 	}
+
+	@RequestMapping("/search")
+	public List<BookResult> search(@RequestParam(value="query") String query) {
+		List<BookResult> bookResults = new ArrayList<BookResult>();
+		List<BookResult> tempBookResults = new ArrayList<BookResult>(bookRepo.getSearchResults(query));
+		for(BookResult bookResult : tempBookResults) {
+			bookResult.setAuthors(authorRepo.getAuthorNamesByISBN13(bookResult.getISBN13()));
+			bookResults.add(bookResult);
+		}
+		return bookResults;
+	}
+		
 }
