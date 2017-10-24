@@ -84,7 +84,22 @@ function checkOut() {
 		},
 		dataType: "json",
 		success: function(data) {
-			console.log(JSON.stringify(data));
+			if(data[0] == 1) {
+				$("#content").html("<h5>Book checked out!</h5>");
+			}
+			else {
+				var res = "";
+				if(data[1] < 1){
+					res += "<h5>Borrower does not exist</h5>";
+				}
+				if(!data[2]){
+					res += "<h5>Book not available</h5>";
+				}
+				if(data[3] >= 3){
+					res += "<h5>Borrower cannot borrow more than three books</h5>";
+				}
+				$("#content").html(res);
+			}
 		}
 	});
 }
