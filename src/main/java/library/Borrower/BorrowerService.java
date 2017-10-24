@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 @RestController
 public class BorrowerService {
@@ -46,7 +47,7 @@ public class BorrowerService {
 		return borrowers;
 	}
 
-	@RequestMapping("/addborrower")
+	@RequestMapping(value = "/addborrower", method = RequestMethod.POST)
 	public Object[] addBorrower(
 			@RequestParam(value="firstName") String firstName,
 			@RequestParam(value="lastName") String lastName,
