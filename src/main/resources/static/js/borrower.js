@@ -1,8 +1,50 @@
 window.onload = attach;
 
 function attach() {
-	$("#borrower").on("click", addBorrower);
+	$("#addborrower").on("click", addBorrower);
 }
+
+$("#firstName").on("keyup", function(event) {
+	if(event.keyCode == 13) {
+		addBorrower();
+	}
+});
+
+$("#lastName").on("keyup", function(event) {
+	if(event.keyCode == 13) {
+		addBorrower();
+	}
+});
+
+$("#email").on("keyup", function(event) {
+	if(event.keyCode == 13) {
+		addBorrower();
+	}
+});
+
+$("#address").on("keyup", function(event) {
+	if(event.keyCode == 13) {
+		addBorrower();
+	}
+});
+
+$("#city").on("keyup", function(event) {
+	if(event.keyCode == 13) {
+		addBorrower();
+	}
+});
+
+$("#state").on("keyup", function(event) {
+	if(event.keyCode == 13) {
+		addBorrower();
+	}
+});
+
+$("#phone").on("keyup", function(event) {
+	if(event.keyCode == 13) {
+		addBorrower();
+	}
+});
 
 function addBorrower() {
 	var firstName = $("#firstName").val();
