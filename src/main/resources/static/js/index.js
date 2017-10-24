@@ -66,12 +66,16 @@ function checkAvailability(id, availability) {
 	console.log(isbn13);
 	if(availability){
 		var res = '<h4>Enter Borrower Id</h4>';
-		res += '<form>';
 		res += '<input type="text" id="borrower" placeholder="Borrower Id" />';
 		res += '<input type="hidden" id="isbn13" value="' + isbn13 + '" />';
 		res += '<input type="button" id="checkout" value="Checkout" />';
 		$("#content").html(res);
 		$("#checkout").on("click", checkOut);
+		$("#borrower").on("keyup", function(event) {
+			if(event.keyCode == 13) {
+				checkOut();
+			}
+		});
 	}
 	else{
 		alert("Book not available");
