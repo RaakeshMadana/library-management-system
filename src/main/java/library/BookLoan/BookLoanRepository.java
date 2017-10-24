@@ -61,6 +61,12 @@ public class BookLoanRepository {
 		return jdbcTemplate.queryForObject("SELECT loan_id FROM book_loan WHERE ISBN13 = ?", Integer.class, ISBN13);
 	}
 
+	public void updateBookLoan(Object[] loanIds, String date) {
+		for(int i = 0; i < loanIds.length; i++){
+			jdbcTemplate.update("UPDATE book_loan SET date_in ='" + date + "'  WHERE loan_id = " + loanIds[i] );
+		}
+	}
+
 	public static final RowMapper<String> isbnMapper = new RowMapper<String>() {
 		public String mapRow(ResultSet rs, int rowNum) throws SQLException {
 			return rs.getString("ISBN13");

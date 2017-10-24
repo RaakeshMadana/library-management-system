@@ -56,20 +56,33 @@ function searchLoaned() {
 
 function checkIn() {
 	var selectedLoanIds = [];
-	for(var i = 0; i < loanId.length; i++) {
-		var loanId = "#" + loanId[i];
-		if($(loanId).prop("checked")) {
-			selectedLoanIds.push(loanId[i]);
+	var temp = loanId;
+	var len = temp.length;
+	for(var i = 0; i < len; i++) {
+		var x = "#" + temp[i];
+		if($(x).prop("checked")) {
+			selectedLoanIds.push(temp[i]);
 		}
 	}
+	console.log(JSON.stringify(selectedLoanIds));
 	$.ajax({
-		type: "GET",
-		url: "/checkin",
-		data: {
-			loanIds: selectedLoanIds
+		headers: {
+			'Accept': 'application/json',
+			'Content-type': 'application/json'
 		},
+		type: "POST",
+		url: "/checkbooksin",
+		data: JSON.stringify(selectedLoanIds),
 		dataType: "json",
 		success: function(data){
+			var res = "";
+			if(data){
+				res = "Checked In!";
+			}
+			else{
+				res = "Not checked in";
+			}
+			$("#content").html(res);
 		}
 	});
 }

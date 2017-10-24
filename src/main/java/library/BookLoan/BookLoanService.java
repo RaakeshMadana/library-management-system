@@ -2,11 +2,15 @@ package library;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.HashMap;
 import java.util.Date;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestBody;
 
 @RestController
 public class BookLoanService {
@@ -82,7 +86,14 @@ public class BookLoanService {
 		return batch;
 	}
 
-	/*@RequestMapping("/checkin")
-	public int checkIn(@RequestParam(value="loanIds") Integer[] loanIds) {
-	}*/
+	@RequestMapping(value = "/checkbooksin", method = RequestMethod.POST)
+	public int checkIn(@RequestBody Object[] loanIds) {
+		java.util.Date today = new java.util.Date();
+		java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd");
+		String dateIn = sdf.format(today);
+		Map<Object, Integer> hashMap = new HashMap<>();
+		System.out.println(loanIds);
+		bookLoanRepo.updateBookLoan(loanIds, dateIn);
+		return 1;
+	}
 }
