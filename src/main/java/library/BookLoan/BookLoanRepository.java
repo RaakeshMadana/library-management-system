@@ -21,18 +21,44 @@ public class BookLoanRepository {
 		if(dates.isEmpty()){
 			return true;
 		}
-		for(String date: dates) {
-			if(date == null){
-				return false;
+		else {
+			for(String date: dates) {
+				if(date == null){
+					return false;
+				}
 			}
+			return true;
 		}
-		return true;
+	}
+
+	public Integer checkBorrower(int cardId) {
+		return jdbcTemplate.queryForObject("SELECT COUNT(*) FROM borrower WHERE card_id = ?", Integer.class, cardId);
+	}
+	
+	public int insertBookLoan(final BookLoan bookLoan) {
+		try {
+			return jdbcTemplate.update("INSERT INTO book_loan(ISBN13, card_id, date_out, due_date) VALUES(?, ?, ?, ?)", new Object[] {
+				bookLoan.getISBN13(),
+				bookLoan.getCardId(),
+				bookLoan.getDateOut(),
+				bookLoan.getDueDate()
+			});
+		}
+		catch(Exception e) {
+			return 0;
+		}
 	}
 
 	public static final RowMapper<String> availabilityMapper = new RowMapper<String>() {
 		public String mapRow(ResultSet rs, int rowNum) throws SQLException {
+			String date;
 			java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd");
-			String date = sdf.format(rs.getDate("date_in"));
+			if(rs.getDate("date_in") == null) {
+				date = null;
+			}
+			else {
+				date = sdf.format(rs.getDate("date_in"));
+			}
 			return date;
 		}
 	};

@@ -22,13 +22,15 @@ function search() {
 				if(data[i]["availability"]){
 					var availability = "Available";
 					var availabilityClass = "available";
+					var availCheckOut = 1;
 				}
 				else{
 					availability = "Not Available";
 					availabilityClass = "notavailable";
+					var availCheckOut = 0;
 				}
 				var div = '';
-				div = '<div class="book" id="' + data[i]["isbn13"] + '">';
+				div = '<div class="book">';
 				div += '<img src="' + data[i]["cover"] + '" alt="' + data[i]["isbn13"] + '" />';
 				div += '<h4 class="title">' + data[i]["title"] + '</h4>';
 				div += '<p class="authors">';
@@ -38,9 +40,10 @@ function search() {
 				}
 				div = div.slice(0, -2);
 				div += '</p>';
-				div += '<p><span class="isbn13"><span class="isbn">ISBN13:</span>' + data[i]["isbn13"] + '</span><span class="isbn10"><span class="isbn">ISBN10:</span>' + data[i]["isbn10"] + '</span></p>'; 
+				div += '<p><span class="isbn13"><span class="isbn">ISBN13:</span><span id="' + i + '">' + data[i]["isbn13"] + '</span></span><span class="isbn10"><span class="isbn">ISBN10:</span>' + data[i]["isbn10"] + '</span></p>'; 
 				div += '<p><span class="pages"><span class="pagepub">Pages:</span>' + data[i]["pages"] + '</span><span class="publisher"><span class="pagepub">Publisher:</span>' + data[i]["publisher"] + '</span></p>'; 
 				div += '<p><span class="' + availabilityClass + '">' + availability + '</span></p>';
+				div += '<button type="button" onclick="checkAvailability(' + i + ',' + availCheckOut + ')">Checkout</button>';
 				div += '</div>';
 				res += div;
 			}
@@ -48,3 +51,41 @@ function search() {
 		}
 	});
 }
+
+function checkAvailability(id, availability) {
+	var id = "#" + id;
+	var span = $(id);
+	var isbn13 = span.text();
+	console.log(availability);
+	console.log(isbn13);
+	if(availability){
+		var res = '<h4>Enter Borrower Id</h4>';
+		res += '<form>';
+		res += '<input type="text" id="borrower" placeholder="Borrower Id" />';
+		res += '<input type="hidden" id="isbn13" value="' + isbn13 + '" />';
+		res += '<input type="button" id="checkout" value="Checkout" />';
+		$("#content").html(res);
+		$("#checkout").on("click", checkOut);
+	}
+	else{
+		alert("Book not available");
+	}
+}
+
+function checkOut() {
+	var borrower = $("#borrower").val();
+	var isbn13 = $("#isbn13").val();
+	$.ajax({
+		type: "GET",
+		url: "/checkout",
+		data: {
+			borrower: borrower,
+			isbn13: isbn13
+		},
+		dataType: "json",
+		success: function(data) {
+			console.log(JSON.stringify(data));
+		}
+	});
+}
+
