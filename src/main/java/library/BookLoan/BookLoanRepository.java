@@ -53,6 +53,20 @@ public class BookLoanRepository {
 		}
 	}
 
+	public List<String> getSearchLoanedResults(String searchQuery) {
+		return jdbcTemplate.query("SELECT L.ISBN13 FROM borrower as B, book_loan as L WHERE B.card_id = L.card_id AND L.date_in IS NULL AND (L.card_id LIKE '%" + searchQuery + "%' OR L.ISBN13 LIKE '%" + searchQuery + "%' OR B.first_name LIKE '%" + searchQuery + "%' OR B.last_name LIKE '%" + searchQuery + "%')", isbnMapper);
+	}
+
+	public Integer getLoanIdByISBN13(String ISBN13) {
+		return jdbcTemplate.queryForObject("SELECT loan_id FROM book_loan WHERE ISBN13 = ?", Integer.class, ISBN13);
+	}
+
+	public static final RowMapper<String> isbnMapper = new RowMapper<String>() {
+		public String mapRow(ResultSet rs, int rowNum) throws SQLException {
+			return rs.getString("ISBN13");
+		}
+	};
+
 	public static final RowMapper<String> availabilityMapper = new RowMapper<String>() {
 		public String mapRow(ResultSet rs, int rowNum) throws SQLException {
 			String date;

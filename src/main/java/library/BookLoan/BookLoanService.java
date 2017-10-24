@@ -14,6 +14,12 @@ public class BookLoanService {
 	@Autowired
 	BookLoanRepository bookLoanRepo;
 
+	@Autowired
+	BookRepository bookRepo;
+
+	@Autowired
+	AuthorRepository authorRepo;
+
 	@RequestMapping("/checkout")
 	public Object[] checkOut(@RequestParam(value="borrower") int cardId, @RequestParam(value="isbn13") String ISBN13) {
 		int borrowerExists = bookLoanRepo.checkBorrower(cardId);
@@ -48,4 +54,35 @@ public class BookLoanService {
 		}
 	}
 
+	@RequestMapping("/searchloaned")
+	public List<Object[]> searchLoaned(@RequestParam(value="query") String query) {	
+		List<String> isbns = new ArrayList<String>(bookLoanRepo.getSearchLoanedResults(query));
+		Book book = null;
+		BookResult bookResult = null;
+		int loanId;
+		List<Object[]> batch = new ArrayList<Object[]>();
+		for(String isbn: isbns) {
+			book = bookRepo.getBookByISBN13(isbn);
+			bookResult = new BookResult(book.getISBN10(), book.getISBN13(), book.getTitle(), book.getCover(), book.getPublisher(), book.getPages());
+			bookResult.setAuthors(authorRepo.getAuthorNamesByISBN13(bookResult.getISBN13()));
+			bookResult.setAvailability(bookLoanRepo.getAvailability(bookResult.getISBN13()));
+			loanId = bookLoanRepo.getLoanIdByISBN13(isbn);
+			Object[] values = {
+				loanId,
+				bookResult.getISBN10(),
+				bookResult.getISBN13(),
+				bookResult.getTitle(),
+				bookResult.getCover(),
+				bookResult.getPublisher(),
+				bookResult.getPages(),
+				bookResult.getAuthors(),
+				bookResult.getAvailability()};
+			batch.add(values);
+		}
+		return batch;
+	}
+
+	/*@RequestMapping("/checkin")
+	public int checkIn(@RequestParam(value="loanIds") Integer[] loanIds) {
+	}*/
 }

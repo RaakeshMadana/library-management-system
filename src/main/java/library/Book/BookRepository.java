@@ -19,6 +19,10 @@ public class BookRepository {
 		return jdbcTemplate.query("SELECT * FROM book", bookMapper);
 	}
 
+	public Book getBookByISBN13(String ISBN13) {
+		return jdbcTemplate.queryForObject("SELECT * FROM book WHERE ISBN13 = '" + ISBN13 + "'", bookMapper);
+	}
+
 	public List<BookResult> getSearchResults(String searchQuery) {
 		return jdbcTemplate.query("SELECT DISTINCT B.ISBN10, B.ISBN13, B.title, B.cover, B.publisher, B.pages FROM book as B, author as A, book_authors as BA WHERE B.ISBN13 = BA.ISBN13 AND BA.author_id = A.author_id AND ( B.ISBN10 LIKE '%" + searchQuery + "%' OR B.ISBN13 LIKE '%" + searchQuery + "%' OR B.title LIKE '%" + searchQuery + "%' OR B.publisher LIKE '%" + searchQuery + "%' OR A.name LIKE '%" + searchQuery + "%')", bookResultMapper);
 	}
