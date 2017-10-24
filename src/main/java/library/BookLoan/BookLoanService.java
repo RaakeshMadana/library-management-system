@@ -15,18 +15,36 @@ public class BookLoanService {
 	BookLoanRepository bookLoanRepo;
 
 	@RequestMapping("/checkout")
-	public int checkOut(@RequestParam(value="borrower") int cardId, @RequestParam(value="isbn13") String ISBN13) {
-		if(bookLoanRepo.checkBorrower(cardId) == 1) {
+	public Object[] checkOut(@RequestParam(value="borrower") int cardId, @RequestParam(value="isbn13") String ISBN13) {
+		int borrowerExists = bookLoanRepo.checkBorrower(cardId);
+		Boolean bookAvailable = bookLoanRepo.getAvailability(ISBN13);
+		int borrowers = bookLoanRepo.checkBorrowerLimit(cardId);
+		int status;
+		if(borrowerExists == 1 && bookAvailable && borrowers < 3) {
 			java.util.Date today = new java.util.Date();
 			java.util.Date due = new java.util.Date(today.getTime() + (1000 * 60 * 60 * 24 * 14));
 			java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd");
 			String dateOut = sdf.format(today);
 			String dueDate = sdf.format(due);
 			BookLoan bookLoan = new BookLoan(0, ISBN13, cardId, dateOut, dueDate, null);
-			return bookLoanRepo.insertBookLoan(bookLoan);
+			status = bookLoanRepo.insertBookLoan(bookLoan);
+			Object[] object = new Object[] {
+				status,
+				borrowerExists,
+				bookAvailable,
+				borrowers
+			};
+			return object;
 		}
 		else {
-			return 0;
+			status = 0;
+			Object[] object = new Object[] {
+				status,
+				borrowerExists,
+				bookAvailable,
+				borrowers
+			};
+			return object;
 		}
 	}
 

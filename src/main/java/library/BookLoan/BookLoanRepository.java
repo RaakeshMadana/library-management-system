@@ -34,6 +34,10 @@ public class BookLoanRepository {
 	public Integer checkBorrower(int cardId) {
 		return jdbcTemplate.queryForObject("SELECT COUNT(*) FROM borrower WHERE card_id = ?", Integer.class, cardId);
 	}
+
+	public Integer checkBorrowerLimit(int cardId) {
+		return jdbcTemplate.queryForObject("SELECT COUNT(*) FROM book_loan WHERE card_id = ?", Integer.class, cardId);
+	}
 	
 	public int insertBookLoan(final BookLoan bookLoan) {
 		try {
