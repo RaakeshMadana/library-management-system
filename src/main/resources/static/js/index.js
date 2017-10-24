@@ -4,6 +4,12 @@ function attach() {
 	$("#search").on("click", search);
 }
 
+$("#searchQuery").on("keyup", function(event) {
+	if(event.keyCode == 13) {
+		search();
+	}
+});
+
 function search() {
 	var searchQuery = $("#searchQuery").val();
 	$.ajax({

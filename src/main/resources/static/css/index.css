@@ -37,6 +37,13 @@ a.navbar-brand:hover {
 	color: #268bd2;
 }
 
+.search {
+	margin-top: 12px;
+	margin-bottom: 5px;
+	margin-right: 5px;
+	margin-left: 10px;
+}
+
 .book {
 	padding-top: 10px;
 	padding-bottom: 10px;
