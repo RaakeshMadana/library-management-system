@@ -67,6 +67,26 @@ public class BookLoanRepository {
 		}
 	}
 
+	public List<BookLoan> getPendingLoanIds() {
+		return jdbcTemplate.query("SELECT loan_id, due_date, date_in FROM book_loan WHERE date_in > due_date OR (date_in IS NULL AND now() > due_date)", pendingLoanMapper);
+	}
+
+	public static final RowMapper<BookLoan> pendingLoanMapper = new RowMapper<BookLoan>() {
+		public BookLoan mapRow(ResultSet rs, int rowNum) throws SQLException {
+			String dateIn, dueDate;
+			java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd");
+			dueDate = sdf.format(rs.getDate("due_date"));
+			if(rs.getDate("date_in") == null) {
+				dateIn = null;
+			}
+			else {
+				dateIn = sdf.format(rs.getDate("date_in"));
+			}
+			BookLoan bookLoan = new BookLoan(rs.getInt("loan_id"), null, 0, null, dueDate, dateIn);
+			return bookLoan;
+		}
+	};
+
 	public static final RowMapper<String> isbnMapper = new RowMapper<String>() {
 		public String mapRow(ResultSet rs, int rowNum) throws SQLException {
 			return rs.getString("ISBN13");
