@@ -16,16 +16,16 @@ public class FineRepository {
 	@Autowired
 	protected JdbcTemplate jdbcTemplate;
 	
-	public int checkFine(int loanId){
+	public int checkLoanId(int loanId){
+		return jdbcTemplate.queryForObject("SELECT COUNT(*) FROM fine WHERE loan_id = ?", Integer.class, loanId);
+	}
+
+	public int checkPaid(int loanId){
 		return jdbcTemplate.queryForObject("SELECT COUNT(*) FROM fine WHERE loan_id = ? AND paid = 0", Integer.class, loanId);
 	}
+
 	public int insertFine(int loanId, java.math.BigDecimal fineAmt){
-		try {
-			return jdbcTemplate.update("INSERT INTO fine(amount, paid) VALUES(?, ?)", new Object[] {loanId, fineAmt});
-		}
-		catch(Exception e) {
-			return 0;
-		}
+		return jdbcTemplate.update("INSERT INTO fine VALUES(?, ?, ?)", loanId, fineAmt, 0);
 	}
 
 	public int updateFine(int loanId, java.math.BigDecimal fineAmt){
@@ -42,7 +42,7 @@ public class FineRepository {
 	}
 
 	public int payFines(int cardId){
-		return jdbcTemplate.update("UPDATE fine SET paid = 1 WHERE loan_id IN(SELECT loan_id FROM book_loan WHERE card_id = ?)", cardId);
+		return jdbcTemplate.update("UPDATE fine SET paid = 1 WHERE loan_id IN(SELECT loan_id FROM book_loan WHERE card_id = ? AND date_in IS NOT NULL)", cardId);
 	}
 
 	public static final RowMapper<Object[]> fineMapper = new RowMapper<Object[]>() {

@@ -39,11 +39,13 @@ public class FineService {
 				long diffInMillies = date.getTime() - dueDate.getTime();
 				long days = diffInMillies / (1000 * 60 * 60 * 24);
 				java.math.BigDecimal fineAmt = new java.math.BigDecimal(days * 0.25);
-				if(fineRepo.checkFine(bookLoan.getLoanId()) == 1) {
-					return fineRepo.insertFine(bookLoan.getLoanId(), fineAmt);
+				if(fineRepo.checkLoanId(bookLoan.getLoanId()) == 0) {
+					fineRepo.insertFine(bookLoan.getLoanId(), fineAmt);
 				}
 				else {
-					return fineRepo.updateFine(bookLoan.getLoanId(), fineAmt);
+					if(fineRepo.checkPaid(bookLoan.getLoanId()) == 1) {
+						fineRepo.updateFine(bookLoan.getLoanId(), fineAmt);
+					}
 				}
 			}
 			catch(Exception exception) {

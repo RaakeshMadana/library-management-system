@@ -183,6 +183,7 @@ function payFine() {
 			else{
 				res += "<h5>Fines paid</h5>";
 			}
+			res += "Note: Borrower should return books before being able to pay for them";
 			$("#finesMsg").html(res);
 		}
 	});
