@@ -84,7 +84,7 @@ a.navbar-brand:hover {
 	font-style: italic;
 }
 
-#content {
+.content {
 	background-color: #fdf6e3;
 	margin-top: 0px;
 	margin-bottom: 50px;

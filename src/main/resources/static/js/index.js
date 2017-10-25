@@ -2,6 +2,7 @@ window.onload = attach;
 
 function attach() {
 	$("#search").on("click", search);
+	$("#updateFine").on("click", updateFine);
 }
 
 $("#searchQuery").on("keyup", function(event) {
@@ -114,3 +115,43 @@ function checkOut() {
 	});
 }
 
+function updateFine() {
+	$.ajax({
+		url: "/updatefine",
+		dataType: "json",
+		success: function(data){
+			var res = '<div><h5>Fines Updated</h5>';
+			res += '<select id="fineOption" name="fineOption">';
+			res += '<option value="1">Unpaid</option>';
+			res += '<option value="2">All</option>';
+			res += '</select>';
+			res += '<button type="button" id="displayFine">Display Fines</button></div>';
+			$("#content").html(res);
+			$("#displayFine").on("click", displayFine);
+		}
+	});
+}
+
+function displayFine() {
+	var option = $("#fineOption").val();
+	$.ajax({
+		type: "GET",
+		url: "/displayfine",
+		data: {
+			fineOption: option
+		},
+		dataType: "json",
+		success: function(data){
+			var res = '<table><tr><th>Borrower Id</th><th>Fine</th></tr>';
+			for(var i = 0; i < data.length; i++){
+				res += '<tr>';
+				for(var j = 0; j < data[i].length; j++){
+					res += '<td>' + data[i][j]+ '</td>';
+				}
+				res += '</tr>';
+			}
+			res += '</table>';
+			$("#finesTable").html(res);
+		}
+	});
+}
