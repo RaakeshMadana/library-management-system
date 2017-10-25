@@ -58,4 +58,9 @@ public class FineService {
 		return fineRepo.getFines(fineOption);
 	}
 
+	@RequestMapping("/payfines")
+	public int payFines(@RequestParam(value="borrowerId") int cardId) {
+		return fineRepo.payFines(cardId);
+	}
+
 }

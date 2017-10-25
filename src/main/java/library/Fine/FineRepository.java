@@ -41,6 +41,10 @@ public class FineRepository {
 		}
 	}
 
+	public int payFines(int cardId){
+		return jdbcTemplate.update("UPDATE fine SET paid = 1 WHERE loan_id IN(SELECT loan_id FROM book_loan WHERE card_id = ?)", cardId);
+	}
+
 	public static final RowMapper<Object[]> fineMapper = new RowMapper<Object[]>() {
 		public Object[] mapRow(ResultSet rs, int rowNum) throws SQLException {
 			Object[] object = {rs.getInt("card_id"), rs.getBigDecimal("fine_amt")};

@@ -151,7 +151,39 @@ function displayFine() {
 				res += '</tr>';
 			}
 			res += '</table>';
-			$("#finesTable").html(res);
+			var form = '<input type="text" id="payFineBorrower" placeholder="Enter Borrower Id" />'
+			form += '<button type="button" id="payFine">Pay Fines</button><br />';
+			$("#finesMsg").html(res);
+			$("#finesForm").html(form);
+			$("#payFine").on("click", payFine);
+			$("#payFineBorrower").on("keyup", function(event) {
+				if(event.keyCode == 13) {
+					payFines();
+				}
+			});
+		}
+	});
+}
+
+function payFine() {
+	var borrowerId = $("#payFineBorrower").val();
+	$.ajax({
+		type: "GET",
+		url: "/payfines",
+		data: {
+			borrowerId: borrowerId
+		},
+		dataType: "json",
+		success: function(data){
+			console.log(data);
+			var res = "";
+			if(data == 0){
+				res += "<h5>Borrower does not have any pending fines</h5>";
+			}
+			else{
+				res += "<h5>Fines paid</h5>";
+			}
+			$("#finesMsg").html(res);
 		}
 	});
 }
