@@ -2,17 +2,17 @@
 
 ### Prerequisites
 
-#### Install Java
+- #### Install Java
 Java SDK 1.6 or higher is required to run the application.
 
 Follow the instructions [here](https://java.com/en/download/help/download_options.xml)
 
-#### Install Gradle
+- #### Install Gradle
 Gradle installs all the dependencies required for the application including the framework Spring Boot itself.
 
 Follow the instructions [here](https://gradle.org/install/)
 
-#### Configuration
+- #### Configuration
 The application has to be configured to connect to the database. Specify the connection parameters by modifying these lines of code in `src/main/java/library/Application.java`
 
 `dataSource.setDriverClassName()` specifies the driver to use to connect to the database
